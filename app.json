@@ -1,0 +1,12 @@
+{
+  "name": "aws-amplify-react-native-chatbot-app",
+  "displayName": "aws-amplify-react-native-chatbot-app",
+  "expo": {
+    "name": "aws-amplify-react-native-chatbot-app",
+    "slug": "aws-amplify-react-native-chatbot-app",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
+}
