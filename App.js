@@ -14,8 +14,21 @@ import {
 } from 'native-base';
 import * as Font from 'expo-font';
 import { Ionicons } from '@expo/vector-icons';
+import { GiftedChat } from 'react-native-gifted-chat';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import Amplify, { Analytics, Interactions } from 'aws-amplify';
+import aws_exports from './aws-exports';
+
+Amplify.configure(aws_exports);
+
+const botUser = {
+  _id: 2,
+  name: 'React Native',
+  avatar:
+    'https://cdn.pixabay.com/photo/2016/03/31/19/58/avatar-1295429_960_720.png',
+};
+let chatId = 1;
 
 const Stack = createStackNavigator();
 
@@ -42,13 +55,7 @@ function App() {
       {isLoading ? (
         <LoadingScreen />
       ) : (
-        <Stack.Navigator
-          screenOptions={{
-            gestureEnabled: true,
-            gestureDirection: 'horizontal',
-          }}
-          mode='modal'
-        >
+        <Stack.Navigator mode='modal'>
           <Stack.Screen
             name='Home'
             component={HomeScreen}
@@ -93,6 +100,47 @@ function HomeScreen({ navigation }) {
 }
 
 function ChatScreen({ navigation }) {
+  const [messages, setMessages] = useState([
+    {
+      _id: chatId,
+      text:
+        'Hello developer, this is a BookTrip Lex Chatbot. Try "I want to reserve a hotel for tonight"',
+      user: botUser,
+      createdAt: new Date(),
+    },
+  ]);
+
+  sendMessageToBot = async (userInput) => {
+    // Provide a bot name and user input
+    const response = await Interactions.send(
+      aws_exports.aws_bots_config[0].name,
+      userInput
+    );
+
+    // Log chatbot response
+    appendChatMessages([formatMessage(response.message)]);
+    Analytics.record('sendMessageToBot');
+  };
+
+  formatMessage = (message) => {
+    chatId = chatId + 1;
+    return {
+      _id: chatId,
+      createdAt: new Date(),
+      text: message,
+      user: botUser,
+    };
+  };
+
+  onSend = (messages) => {
+    messages.map((msg) => sendMessageToBot(msg.text));
+    appendChatMessages(messages);
+  };
+
+  appendChatMessages = (newMessages) => {
+    setMessages(GiftedChat.append(messages, newMessages));
+  };
+
   return (
     <Container>
       <Header>
@@ -106,7 +154,13 @@ function ChatScreen({ navigation }) {
           </Button>
         </Right>
       </Header>
-      <Text>Chat Screen</Text>
+      <GiftedChat
+        messages={messages}
+        onSend={(m) => onSend(m)}
+        user={{
+          _id: 1,
+        }}
+      />
     </Container>
   );
 }
