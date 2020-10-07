@@ -30,6 +30,12 @@ const botUser = {
 };
 let chatId = 1;
 
+const botconfig = {
+  name: 'BookTrip_dev',
+  alias: '$LATEST',
+  region: 'us-east-1',
+};
+
 const Stack = createStackNavigator();
 
 function App() {
@@ -112,10 +118,7 @@ function ChatScreen({ navigation }) {
 
   sendMessageToBot = async (userInput) => {
     // Provide a bot name and user input
-    const response = await Interactions.send(
-      aws_exports.aws_bots_config[0].name,
-      userInput
-    );
+    const response = await Interactions.send(botconfig.name, userInput);
 
     // Log chatbot response
     appendChatMessages([formatMessage(response.message)]);
