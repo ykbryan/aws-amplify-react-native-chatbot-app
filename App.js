@@ -22,6 +22,7 @@ import aws_exports from './aws-exports';
 
 Amplify.configure(aws_exports);
 
+// setup lex chatbot
 const botUser = {
   _id: 2,
   name: 'React Native',
@@ -29,7 +30,6 @@ const botUser = {
     'https://cdn.pixabay.com/photo/2016/03/31/19/58/avatar-1295429_960_720.png',
 };
 let chatId = 1;
-
 const botconfig = {
   name: 'BookTrip_dev',
   alias: '$LATEST',
@@ -38,6 +38,7 @@ const botconfig = {
 
 const Stack = createStackNavigator();
 
+// setup navigation stack
 function App() {
   const [isLoading, setIsLoading] = useState(true);
   const navigationRef = useRef();
@@ -82,6 +83,7 @@ function App() {
   );
 }
 
+// setup home screen
 function HomeScreen({ navigation }) {
   return (
     <Container>
