@@ -1,0 +1,21 @@
+{
+  "auth": {
+    "cognito95dcbe04": {
+      "service": "Cognito",
+      "providerPlugin": "awscloudformation"
+    }
+  },
+  "interactions": {
+    "mobilechatbot": {
+      "service": "Lex",
+      "providerPlugin": "awscloudformation",
+      "build": true
+    }
+  },
+  "analytics": {
+    "amplifymobilechatbot": {
+      "service": "Pinpoint",
+      "providerPlugin": "awscloudformation"
+    }
+  }
+}
