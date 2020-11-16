@@ -17,7 +17,8 @@ import { Ionicons } from '@expo/vector-icons';
 import { GiftedChat } from 'react-native-gifted-chat';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import Amplify, { Analytics, Interactions } from 'aws-amplify';
+import Amplify from '@aws-amplify/core';
+import Interactions from '@aws-amplify/interactions';
 import aws_exports from './aws-exports';
 
 Amplify.configure(aws_exports);
@@ -30,11 +31,6 @@ const botUser = {
     'https://cdn.pixabay.com/photo/2016/03/31/19/58/avatar-1295429_960_720.png',
 };
 let chatId = 1;
-const botconfig = {
-  name: 'BookTrip_dev',
-  alias: '$LATEST',
-  region: 'us-east-1',
-};
 
 const Stack = createStackNavigator();
 
@@ -120,7 +116,7 @@ function ChatScreen({ navigation }) {
 
   sendMessageToBot = async (userInput) => {
     // Provide a bot name and user input
-    const response = await Interactions.send(botconfig.name, userInput);
+    const response = await Interactions.send(aws_exports.aws_bots_config.name, userInput);
 
     // Log chatbot response
     appendChatMessages([formatMessage(response.message)]);
@@ -128,7 +124,7 @@ function ChatScreen({ navigation }) {
   };
 
   formatMessage = (message) => {
-    chatId = chatId + 1;
+    chatId ++;
     return {
       _id: chatId,
       createdAt: new Date(),
